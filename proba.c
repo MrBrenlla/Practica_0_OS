@@ -42,7 +42,7 @@ void main() {
 	while (acabado != 1){
 		printf("->");
 		scanf("%c", &teclado);
-		TrocearCadena();
+		//TrocearCadena(); /* Haille que poñer os argumentos para que vaia*/
 	}
 }
 /*
