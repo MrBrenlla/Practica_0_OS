@@ -70,7 +70,53 @@ void limpiarBuffer(char buf[]){
 		buf[i]='\0';
 	}
 }
-
+/*
+--------------------------------------------------------------------------------
+*/
+void fin(int * x ){
+	*x=1;
+}
+/*
+--------------------------------------------------------------------------------
+*/
+void escollerFuncion(char com[],char arg[],int palabras,int * acabado){
+	if (strncmp(com,"autores\0",8)==0){
+		printf("autores(com,arg,palabras)\n" );
+	}
+	else{
+		if (strncmp(com,"pid\0",4)==0){
+			printf("pid(com,arg,palabras)\n" );
+		}
+		else{
+			if (strncmp(com,"cdir\0",5)==0){
+				printf("cdir(com,arg,palabras)\n" );
+			}
+			else{
+				if (strncmp(com,"fecha\0",6)==0){
+					printf("fecha(com)\n" );
+				}
+				else{
+					if (strncmp(com,"hora\0",5)==0){
+						printf("hora(com)\n" );
+					}
+					else{
+						if (strncmp(com,"hist\0",5)==0){
+							printf("hist(com,arg,palabras)\n" );
+						}
+						else{
+							if ((strncmp(com,"fin\0",4)==0) || (strncmp(com,"end\0",4)==0) || (strncmp(com,"exit\0",5)==0)){
+								fin(acabado);
+							}
+							else{
+								printf("comando non valido\n" );
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
 /*
 --------------------------------------------------------------------------------
 */
@@ -82,16 +128,16 @@ void main() {
 		numPalabras=TrocearCadena(teclado , comando, argumento);
 
 		//mostrar por pantalla comando e argumento, para probas
-		for (int i=0 ; comando[i]!='\0' ; i++){
+		/*for (int i=0 ; comando[i]!='\0' ; i++){
 			printf("%c",  comando[i] );
 		}
 		printf("\n" );
 		for (int i=0 ; argumento[i]!='\0' ; i++){
 			printf("%c",  argumento[i] );
 		}
-		printf("\n" );
+		printf("\n" );*/
 
-
+		escollerFuncion(comando,argumento,numPalabras,&acabado);
 
 
 		limpiarBuffer(teclado);
