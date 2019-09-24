@@ -29,12 +29,23 @@ char argumento[101];
 /*
 --------------------------------------------------------------------------------
 */
+void limpiarBuffer(char buf[]){
+	for (int i  = 0 ; (buf[i]!='\0') || (i<7); i++ ){
+		buf[i]='\0';
+	}
+}
+/*
+--------------------------------------------------------------------------------
+*/
 int TrocearCadena(char  cadena[], char  com[] , char arg[])
 {
 	int espacios =0;
 	int palabras =0;
 	int letras =0;
 	char trozos[101];
+
+	limpiarBuffer(trozos);
+
 	for (int i=0; cadena[i]!='\0'  ; i++){
 		if (cadena[i]==' '){
 			espacios+=1;
@@ -47,8 +58,9 @@ int TrocearCadena(char  cadena[], char  com[] , char arg[])
 			}
 		}
 	}
-	for (int i=0 ; i<101 ; i++ ) {
-		if (trozos[i]==' '){
+	puts(trozos);
+	for (int i=0 ; trozos[i]!='\0' ; i++ ) {
+		if ((trozos[i]==' ')){
 			palabras+=1;
 		}
 		else{
@@ -60,15 +72,6 @@ int TrocearCadena(char  cadena[], char  com[] , char arg[])
 		}
 	}
 return palabras;
-}
-
-/*
---------------------------------------------------------------------------------
-*/
-void limpiarBuffer(char buf[]){
-	for (int i  = 0 ; buf[i]!='\0'; i++ ){
-		buf[i]='\0';
-	}
 }
 /*
 --------------------------------------------------------------------------------
@@ -120,22 +123,18 @@ void escollerFuncion(char com[],char arg[],int palabras,int * acabado){
 /*
 --------------------------------------------------------------------------------
 */
-void main() {
+int main() {
 	while (acabado != 1){
 		printf("->");
 		gets(teclado);
 		//Devolbe o comando, o argumento e un número que corresponde a se hai 1, 2 ou mais palabras(3)
 		numPalabras=TrocearCadena(teclado , comando, argumento);
 
-		//mostrar por pantalla comando e argumento, para probas
-		/*for (int i=0 ; comando[i]!='\0' ; i++){
-			printf("%c",  comando[i] );
-		}
-		printf("\n" );
-		for (int i=0 ; argumento[i]!='\0' ; i++){
-			printf("%c",  argumento[i] );
-		}
-		printf("\n" );*/
+		/*mostrar por pantalla comando e argumento, para probas
+		puts(teclado );
+		puts(comando );
+		puts(argumento );
+		*/
 
 		escollerFuncion(comando,argumento,numPalabras,&acabado);
 
