@@ -19,30 +19,56 @@ Nodo*cabecera;
 */
 
 #include <stdio.h>
+#include <string.h>
 
 int acabado = 0;
-char  *teclado[];
+char  teclado[];
 char  comando[];
-char  argumento[];
 /*
 --------------------------------------------------------------------------------
 */
-int TrocearCadena(char * cadena, char * trozos[])
-{ int i=1;
+
+int TrocearCadena(char * cadena, char * trozos[]) {
+int i=1;
+
 if ((trozos[0]=strtok(cadena," \n\t"))==NULL)
-return 0;
-while ((trozos[i]=strtok(NULL," \n\t"))!=NULL)
-i++;
+	return 0;
+ while ((trozos[i]=strtok(NULL," \n\t"))!=NULL)
+ 	i++;
 return i;
 }
+
+
+/*
+void TrocearCadena(char * cadena[], char * trozos[])
+{
+	int espacios =0;
+	for (int i=0; i<100  ; i++){
+		if (cadena[i]==' '){
+			espacios+=1;
+		}
+		else{
+			trozos[i-espacios]=cadena[i];
+		}
+	}
+
+}
+*/
+/*
+--------------------------------------------------------------------------------
+*/
+//int detectarComando ()
+
 /*
 --------------------------------------------------------------------------------
 */
 void main() {
 	while (acabado != 1){
 		printf("->");
-		scanf("%c", &teclado);
-		//TrocearCadena(); /* Haille que poñer os argumentos para que vaia*/
+		gets(&teclado);
+		TrocearCadena(&teclado , &comando);
+		printf("%s\n", comando[1] );
+
 	}
 }
 /*
