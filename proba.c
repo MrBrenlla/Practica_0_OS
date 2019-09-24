@@ -26,17 +26,6 @@ char  teclado[101];
 char  comando[101];
 /*
 --------------------------------------------------------------------------------
-*
-int TrocearCadena(char * cadena, char * trozos[]) {
-int i=1;
-if ((trozos[0]=strtok(cadena," \n\t"))==NULL){
-	return 0;
-}
- while ((trozos[i]=strtok(NULL," \n\t"))!=NULL){
- 	i++;
-	}
-return i;
-}
 */
 void TrocearCadena(char  cadena[], char  trozos[])
 {
@@ -58,7 +47,11 @@ void TrocearCadena(char  cadena[], char  trozos[])
 /*
 --------------------------------------------------------------------------------
 */
-//int detectarComando ()
+void limpiarBuffer(char buf[]){
+	for (int i  = 0 ; buf[i]!='\0'; i++ ){
+		buf[i]='\0';
+	}
+}
 
 /*
 --------------------------------------------------------------------------------
@@ -70,8 +63,11 @@ void main() {
 		TrocearCadena(teclado , comando);
 		for (int i=0 ; i<101 ; i++){
 		printf("%c",  comando[i] );
-
 	}
+		limpiarBuffer(teclado);
+		limpiarBuffer(comando);
+
+
 	}
 }
 /*
