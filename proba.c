@@ -58,7 +58,6 @@ int TrocearCadena(char  cadena[], char  com[] , char arg[])
 			}
 		}
 	}
-	puts(trozos);
 	for (int i=0 ; trozos[i]!='\0' ; i++ ) {
 		if ((trozos[i]==' ')){
 			palabras+=1;
