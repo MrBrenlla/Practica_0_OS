@@ -40,7 +40,7 @@ void limpiarBuffer(char buf[]){
 int TrocearCadena(char  cadena[], char  com[] , char arg[])
 {
 	int espacios =0;
-	int palabras =0;
+	int palabras =1;
 	int letras =0;
 	char trozos[101];
 
@@ -64,8 +64,8 @@ int TrocearCadena(char  cadena[], char  com[] , char arg[])
 		}
 		else{
 			switch (palabras) {
-				case 0:com[i]=trozos[i]; letras+=1; break;
-				case 1:arg[i-(letras+1)]=trozos[i]; break;
+				case 1:com[i]=trozos[i]; letras+=1; break;
+				case 2:arg[i-(letras+1)]=trozos[i]; break;
 				default: return palabras; break;
 			}
 		}
@@ -82,35 +82,40 @@ void fin(int * x ){
 --------------------------------------------------------------------------------
 */
 void escollerFuncion(char com[],char arg[],int palabras,int * acabado){
-	if (strncmp(com,"autores\0",8)==0){
-		printf("autores(com,arg,palabras)\n" );
+	if (palabras==3){
+		printf("comando non valido\n" );
 	}
 	else{
-		if (strncmp(com,"pid\0",4)==0){
-			printf("pid(com,arg,palabras)\n" );
+		if (strncmp(com,"autores\0",8)==0){
+			printf("autores(com,arg,palabras)\n" );
 		}
 		else{
-			if (strncmp(com,"cdir\0",5)==0){
-				printf("cdir(com,arg,palabras)\n" );
+			if (strncmp(com,"pid\0",4)==0){
+				printf("pid(com,arg,palabras)\n" );
 			}
 			else{
-				if (strncmp(com,"fecha\0",6)==0){
-					printf("fecha(com)\n" );
+				if (strncmp(com,"cdir\0",5)==0){
+					printf("cdir(com,arg,palabras)\n" );
 				}
 				else{
-					if (strncmp(com,"hora\0",5)==0){
-						printf("hora(com)\n" );
+					if (strncmp(com,"fecha\0",6)==0 && palabras==1){
+						printf("fecha(com)\n" );
 					}
 					else{
-						if (strncmp(com,"hist\0",5)==0){
-							printf("hist(com,arg,palabras)\n" );
+						if (strncmp(com,"hora\0",5)==0 && palabras==1){
+							printf("hora(com)\n" );
 						}
 						else{
-							if ((strncmp(com,"fin\0",4)==0) || (strncmp(com,"end\0",4)==0) || (strncmp(com,"exit\0",5)==0)){
-								fin(acabado);
+							if (strncmp(com,"hist\0",5)==0){
+								printf("hist(com,arg,palabras)\n" );
 							}
 							else{
-								printf("comando non valido\n" );
+								if (((strncmp(com,"fin\0",4)==0) || (strncmp(com,"end\0",4)==0) || (strncmp(com,"exit\0",5)==0)) && palabras==1){
+									fin(acabado);
+								}
+								else{
+									printf("comando non valido\n" );
+								}
 							}
 						}
 					}
