@@ -19,6 +19,7 @@ Nodo*cabecera;
 */
 
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 
 int acabado = 0;
@@ -40,7 +41,7 @@ void limpiarBuffer(char buf[]){
 int TrocearCadena(char  cadena[], char  com[] , char arg[])
 {
 	int espacios =0;
-	int palabras =1;
+	int palabras =0;
 	int letras =0;
 	char trozos[101];
 
@@ -52,25 +53,67 @@ int TrocearCadena(char  cadena[], char  com[] , char arg[])
 		}
 		else{
 			trozos[i-espacios]=cadena[i];
-			if( cadena[i+1]==' '){
+			if( (cadena[i+1]==' ') || (cadena[i+1]=='\0')){
 				trozos[(i-espacios)+1]=' ';
 				espacios-=1;
 			}
 		}
 	}
 	for (int i=0 ; trozos[i]!='\0' ; i++ ) {
-		if ((trozos[i]==' ')){
+		if (trozos[i]==' '){
 			palabras+=1;
 		}
 		else{
 			switch (palabras) {
-				case 1:com[i]=trozos[i]; letras+=1; break;
-				case 2:arg[i-(letras+1)]=trozos[i]; break;
-				default: return palabras; break;
+				case 0:com[i]=trozos[i]; letras+=1; break;
+				case 1:arg[i-(letras+1)]=trozos[i]; break;
+				default:return palabras; break;
 			}
 		}
 	}
 return palabras;
+}
+/*
+--------------------------------------------------------------------------------
+*/
+void cdir(char com[],char arg[],int palabras){
+	char dir[101];
+	limpiarBuffer(dir);
+	if (palabras==1){
+		getcwd(dir,101);
+		puts(dir);
+	}
+	else{
+		if (chdir(arg)!=0){
+				printf("error\n" );
+		}
+	}
+}
+/*
+--------------------------------------------------------------------------------
+*/
+void autores(char com[],char arg[],int palabras){
+
+	if (palabras==1 || strncmp(arg,"-n\0",3)){
+		printf("Brais Garcia Brenlla" );
+	}
+	if (palabras==1){
+		printf(": " );
+	}
+	if (palabras==1 || strncmp(arg,"-l\0",3)){
+		printf("b.brenlla" );
+	}
+	printf("\n");
+	if (palabras==1 || strncmp(arg,"-n\0",3)){
+		printf("Angel Alvarez Rey" );
+	}
+	if (palabras==1){
+		printf(": " );
+	}
+	if (palabras==1 || strncmp(arg,"-l\0",3)){
+		printf("angel.alvarez.rey" );
+	}
+	printf("\n");
 }
 /*
 --------------------------------------------------------------------------------
@@ -83,11 +126,11 @@ void fin(int * x ){
 */
 void escollerFuncion(char com[],char arg[],int palabras,int * acabado){
 	if (palabras==3){
-		printf("comando non valido\n" );
+		printf("comando o argumentos no validos\n" );
 	}
 	else{
 		if (strncmp(com,"autores\0",8)==0){
-			printf("autores(com,arg,palabras)\n" );
+			autores(com,arg,palabras);
 		}
 		else{
 			if (strncmp(com,"pid\0",4)==0){
@@ -95,7 +138,7 @@ void escollerFuncion(char com[],char arg[],int palabras,int * acabado){
 			}
 			else{
 				if (strncmp(com,"cdir\0",5)==0){
-					printf("cdir(com,arg,palabras)\n" );
+					cdir(com,arg,palabras);
 				}
 				else{
 					if (strncmp(com,"fecha\0",6)==0 && palabras==1){
@@ -114,7 +157,7 @@ void escollerFuncion(char com[],char arg[],int palabras,int * acabado){
 									fin(acabado);
 								}
 								else{
-									printf("comando non valido\n" );
+									printf("%s no encontrado\n",com );
 								}
 							}
 						}
