@@ -1,22 +1,3 @@
-/*
-Struct nodo
-{
-Int dato;
-Struct nodo *enlace;
-};
-Struct nodo *cabecera;
-cabecera=NULL;
-
------------------------------------
-
-typedef struct Elemento
-{
-int dato;
-struct Elemento *enlace;
-Cabecera=NULL;
-} Nodo;
-Nodo*cabecera;
-*/
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -29,6 +10,14 @@ int numPalabras;
 char  teclado[101];
 char  comando[101];
 char argumento[101];
+
+typedef  struct nodo {
+	char dato[101];
+	struct nodo * sig;
+} tNodo;
+
+
+
 /*
 --------------------------------------------------------------------------------
 */
@@ -55,13 +44,12 @@ int TrocearCadena(char  cadena[], char  com[] , char arg[])
 		}
 		else{
 			trozos[i-espacios]=cadena[i];
-			if( cadena[i+1]==' '){
+			if( (cadena[i+1]==' ') || (cadena[i+1]=='\0')){
 				trozos[(i-espacios)+1]=' ';
 				espacios-=1;
 			}
 		}
 	}
-	puts(trozos);
 	for (int i=0 ; trozos[i]!='\0' ; i++ ) {
 		if ((trozos[i]==' ')){
 			palabras+=1;
@@ -86,11 +74,11 @@ void fin(int * x ){
 /*
 --------------------------------------------------------------------------------
 */
-void autores( char com[],char arg[], int palabras){
-		if (palabras == 0){
+void autores( char arg[], int palabras){
+		if (palabras == 1){
 				printf("Brais: b.brenlla\nÁngel: angel.alvarez.rey\n");
 		}
-		if (palabras == 1){
+		if (palabras == 2){
 				if (strncmp(arg,"-l\0",2)==0){
 						printf("b.brenlla\nangel.alvarez.rey\n");
 				} else if (strncmp(arg,"-n\0",2)==0){
@@ -105,33 +93,30 @@ void autores( char com[],char arg[], int palabras){
 --------------------------------------------------------------------------------
 */
 
-void fecha( char *com[], int palabras){
+void fecha(){
 	time_t tiempo = time(0);
         struct tm *tlocal = localtime(&tiempo);
         char output[128];
         strftime(output,128,"%d/%m/%y %H:%M:%S",tlocal);
         printf("%s\n",output);
-
-        return 0;
 }
 
 /*
 --------------------------------------------------------------------------------
 */
-void hora( char *com[], int palabras){
+void hora(){
 	time_t tiempo = time(0);
         struct tm *tlocal = localtime(&tiempo);
         char output[128];
         strftime(output,128,"%H:%M:%S",tlocal);
         printf("%s\n",output);
 
-        return 0;
 }
 
 /*
 --------------------------------------------------------------------------------
 */
-
+/*
 void cdir(char com[], char arg[], int palabras){
 	char *directorioActual[100];
 
@@ -141,18 +126,33 @@ void cdir(char com[], char arg[], int palabras){
     printf("Non se puido cambiar o directorio\n");
 	}
 }
+*/
+
+void cdir(char arg[], int palabras){
+	char dir[101];
+	limpiarBuffer(dir);
+	if (palabras==1){
+		getcwd(dir,101);
+		puts(dir);
+	}
+	else{
+		if (chdir(arg)!=0){
+				printf("error\n" );
+		}
+	}
+}
 /*
 --------------------------------------------------------------------------------
 */
-void pid(char *arg[], int palabras) {
+void pid(char arg[], int palabras) {
   pid_t pid = getpid();
   pid_t pidp = getppid();
 
   if (pid != 0) {
-    if (palabras == 0) {
-      printf("Pid del shell: %lu\n",pid);
+    if (palabras == 1) {
+      printf("Pid del shell: %u\n",pid);
     } else if (!strcmp("-p",arg)){
-      printf("Pid del padre del shell: %lu\n",pidp);
+      printf("Pid del padre del shell: %u\n",pidp);
     } else {
       printf("\n");
     }
@@ -161,36 +161,66 @@ void pid(char *arg[], int palabras) {
 /*
 --------------------------------------------------------------------------------
 */
-void escollerFuncion(char com[], char arg[],int palabras,int * acabado){
-	if (strncmp(com,"autores\0",8)==0){
-		autores(com, arg, palabras);
+void gardar(char teclado[101],tNodo * h){
+	if (h==NULL){
+		h = (tNodo *)malloc(sizeof(tNodo));
+		strcpy(h->dato,teclado);
+		h->sig=NULL;
+		printf("6\n" );
 	}
 	else{
-		if (strncmp(com,"pid\0",4)==0){
-			pid( arg, palabras);
+		gardar(teclado,&h->sig);
+	}
+}
+
+
+
+void hist(tNodo * aux) {
+	printf("chega\n");
+		if(aux != NULL) {
+			puts(aux->dato);
+			hist(aux->sig);
+		}
+	printf("hist\n");
+}
+/*
+--------------------------------------------------------------------------------
+*/
+void escollerFuncion(char com[],char arg[],int palabras,int * acabado,tNodo * h){
+	if (palabras==3){
+		printf("comando o argumentos no validos\n" );
+	}
+	else{
+		if (strncmp(com,"autores\0",8)==0){
+			autores(arg,palabras);
 		}
 		else{
-			if (strncmp(com,"cdir\0",5)==0){
-				(com, arg, palabras);
+			if (strncmp(com,"pid\0",4)==0){
+				pid(arg,palabras);
 			}
 			else{
-				if (strncmp(com,"fecha\0",6)==0){
-					fecha(&com, palabras);
+				if (strncmp(com,"cdir\0",5)==0){
+					cdir(arg,palabras);
 				}
 				else{
-					if (strncmp(com,"hora\0",5)==0){
-						hora(com, palabras);
+					if (strncmp(com,"fecha\0",6)==0 && palabras==1){
+						fecha();
 					}
 					else{
-						if (strncmp(com,"hist\0",5)==0){
-							printf("hist(com,arg,palabras)\n" );
+						if (strncmp(com,"hora\0",5)==0 && palabras==1){
+							hora();
 						}
 						else{
-							if ((strncmp(com,"fin\0",4)==0) || (strncmp(com,"end\0",4)==0) || (strncmp(com,"exit\0",5)==0)){
-								fin(acabado);
+							if (strncmp(com,"hist\0",5)==0 && palabras==1){
+								hist(h);
 							}
 							else{
-								printf("comando non valido\n" );
+								if (((strncmp(com,"fin\0",4)==0) || (strncmp(com,"end\0",4)==0) || (strncmp(com,"exit\0",5)==0)) ){
+									fin(acabado);
+								}
+								else{
+									printf("%s no encontrado\n",com );
+								}
 							}
 						}
 					}
@@ -203,9 +233,14 @@ void escollerFuncion(char com[], char arg[],int palabras,int * acabado){
 --------------------------------------------------------------------------------
 */
 int main() {
+tNodo * historial = malloc(sizeof(tNodo));
+
 	while (acabado != 1){
 		printf("->");
 		gets(teclado);
+		gardar(teclado,historial);
+
+
 		//Devolve o comando, o argumento e un número que corresponde a se hai 1, 2 ou mais palabras(3)
 		numPalabras=TrocearCadena(teclado , comando, argumento);
 
@@ -215,7 +250,7 @@ int main() {
 		puts(argumento );
 		*/
 
-		escollerFuncion(comando,argumento,numPalabras,&acabado);
+		escollerFuncion(comando,argumento,numPalabras,&acabado,historial);
 
 
 		limpiarBuffer(teclado);
