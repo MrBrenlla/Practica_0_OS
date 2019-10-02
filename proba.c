@@ -46,7 +46,7 @@ int TrocearCadena(char  cadena[], char com[] , char arg[])
 
 	limpiarBuffer(trozos);
 
-	for (int i=0; (cadena[i]!='\0')  ; i++){
+	for (int i=0; (cadena[i]!='\0')&&(cadena[i]!='\n')  ; i++){
 		if (cadena[i]==' '){
 			espacios+=1;
 		}
@@ -58,6 +58,7 @@ int TrocearCadena(char  cadena[], char com[] , char arg[])
 			}
 		}
 	}
+
 	for (int i=0 ; (cadena[i]!='\0') ; i++ ) {
 		if ((trozos[i]==' ')){
 			palabras+=1;
