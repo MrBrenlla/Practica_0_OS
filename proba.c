@@ -6,16 +6,16 @@
 #include <time.h>
 
 
-#define MAX  200
+#define MAX  300
 
 int acabado = 0;
 int numPalabras;
-char  teclado[101];
-char  comando[101];
-char argumento[101];
+char  teclado[MAX];
+char  comando[MAX];
+char argumento[MAX];
 
  typedef  struct nodo {
- 	char dato[101];
+ 	char dato[MAX];
 	struct nodo * sig;
  } tNodo;
 
@@ -42,7 +42,7 @@ int TrocearCadena(char  cadena[], char com[] , char arg[])
 	int espacios =0;
 	int palabras =0;
 	int letras =0;
-	char trozos[101];
+	char trozos[MAX];
 
 	limpiarBuffer(trozos);
 
@@ -117,7 +117,7 @@ void fecha(){
 	time_t tiempo = time(0);
         struct tm *tlocal = localtime(&tiempo);
         char output[128];
-        strftime(output,128,"%d/%m/%y %H:%M:%S",tlocal);
+        strftime(output,128,"%c",tlocal);
         printf("%s\n",output);
 }
 
@@ -138,10 +138,10 @@ void hora(){
 */
 
 void cdir(char arg[], int palabras){
-	char dir[101];
+	char dir[MAX];
 	limpiarBuffer(dir);
 	if (palabras==1){
-		getcwd(dir,101);
+		getcwd(dir,MAX);
 		puts(dir);
 	}
 	else{
@@ -170,7 +170,7 @@ void pid(char arg[], int palabras) {
 /*
 --------------------------------------------------------------------------------
 */
-// void gardar(char teclado[101],tNodo * h){
+// void gardar(char teclado[MAX],tNodo * h){
 // 		tNodo * aux = h;
 // 		tNodo * new;
 // 		while (aux->sig!=NULL){
@@ -195,7 +195,7 @@ void pid(char arg[], int palabras) {
 // 	printf("hist\n");
 // }
 
-void gardar(char teclado[101],tList * h){
+void gardar(char teclado[MAX],tList * h){
 	if (h->inicio==NULL){
 		h->inicio=malloc(sizeof(tNodo));
 		h->final=h->inicio;
@@ -276,7 +276,7 @@ int main() {
 
 	while (acabado != 1){
 		printf("->");
-    fgets(teclado,101,stdin);
+    fgets(teclado,MAX,stdin);
 		gardar(teclado,&historial);
 
 
