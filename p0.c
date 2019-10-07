@@ -85,7 +85,7 @@ int TrocearCadena(char  cadena[], char com[] , char arg[])
 			switch (palabras) {
 				case 0:com[i]=trozos[i]; letras+=1; break;
 				case 1:arg[i-(letras+1)]=trozos[i]; break;
-				default: return palabras; break;
+				default: return palabras+1; break;
 			}
 		}
 	}
